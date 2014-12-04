@@ -15,16 +15,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
 /**
- * Created by yugy on 14/12/2.
+ * Created by yugy(me@yanghui.name) on 14/12/2.
+ * A layout like a folder and you can show one of them like open a file.
  */
 public class FolderLayout extends FrameLayout{
 
@@ -294,23 +293,47 @@ public class FolderLayout extends FrameLayout{
         invalidate();
     }
 
-    private void playShrinkItemAnimation(View child) {
+    private void playShrinkItemAnimation(final View child) {
         final LayoutParams p = (LayoutParams) child.getLayoutParams();
         TranslateAnimation animation = new TranslateAnimation(0, 0, 0, p.minimumTop - child.getTop());
         animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.setDuration(mDuration);
-        animation.setFillBefore(true);
         animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                child.offsetTopAndBottom(p.minimumTop - child.getTop());
+                child.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
         child.startAnimation(animation);
     }
 
-    private void playExpandItemAnimation(View child) {
+    private void playExpandItemAnimation(final View child) {
         final LayoutParams p = (LayoutParams) child.getLayoutParams();
-        TranslateAnimation animation = new TranslateAnimation(0, 0, p.minimumTop - child.getTop(), 0);
+        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, p.shrinkTop - child.getTop());
         animation.setInterpolator(new AccelerateDecelerateInterpolator());
         animation.setDuration(mDuration);
-        animation.setFillBefore(true);
         animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                child.offsetTopAndBottom(p.shrinkTop - child.getTop());
+                child.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
         child.startAnimation(animation);
     }
 
@@ -397,7 +420,6 @@ public class FolderLayout extends FrameLayout{
         int shrinkTop;
         int expandTop;
         int minimumTop;
-        boolean animateToMinimum = false;
 
         public LayoutParams() {
             super(MATCH_PARENT, MATCH_PARENT);
