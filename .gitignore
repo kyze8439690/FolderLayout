@@ -1,0 +1,9 @@
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+FolderLayout.iml
+gradle.properties
+gradlew*
+local.properties

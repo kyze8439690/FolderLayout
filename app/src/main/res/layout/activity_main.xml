@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <me.yugy.github.folderlayout.FolderLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/folder_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:handlerHeight="48dp"
+        app:minHandlerHeight="12dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ddff"
+            >
+
+            <TextView
+                android:id="@+id/item4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="ViewPager"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textSize="32sp"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_below="@id/item4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#99cc00"
+            >
+
+            <TextView
+                android:id="@+id/item3"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="ListView"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textSize="32sp"/>
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_below="@id/item3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ff8800"
+            >
+
+            <TextView
+                android:id="@+id/item2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="GridView"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textSize="32sp"/>
+
+            <GridView
+                android:id="@+id/grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/item2"
+                android:numColumns="2"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aa66cc"
+            >
+
+            <TextView
+                android:id="@+id/item1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="ScrollView"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textSize="32sp"/>
+
+            <ScrollView
+                android:layout_below="@+id/item1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="128sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_horizontal"
+                    android:text="1\n2\n3\n4\n5\n6\n7\n8"
+                    />
+
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </me.yugy.github.folderlayout.FolderLayout>
+
+</FrameLayout>
