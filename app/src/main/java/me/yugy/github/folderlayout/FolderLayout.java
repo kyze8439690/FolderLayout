@@ -42,6 +42,7 @@ public class FolderLayout extends FrameLayout{
     private int mHandlerHeight;
     private int mMinHandlerHeight;
     private int mDuration;
+    private int mClipBottom;
 
     /**
      * The fade color used for the panel covered by the slider. 0 = no fading.
@@ -129,13 +130,15 @@ public class FolderLayout extends FrameLayout{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d("FolderLayout", "mSlideOffset: " +  mSlideOffset);
+        canvas.save();
+        canvas.clipRect(getLeft(), getTop(), getRight(), mClipBottom);
         if (mCoveredFadeColor != 0 && mSlideOffset > 0) {
             final int baseAlpha = (mCoveredFadeColor & 0xff000000) >>> 24;
             final int imag = (int) (baseAlpha * mSlideOffset);
             final int color = imag << 24 | (mCoveredFadeColor & 0xffffff);
             canvas.drawColor(color);
         }
+        canvas.restore();
     }
 
     private View findHorizontalScrollableViewAtPosition(View parent, int x, int y) {
@@ -264,9 +267,11 @@ public class FolderLayout extends FrameLayout{
         mDragHelper.smoothSlideViewTo(releasedChild, releasedChild.getLeft(), lp.expandTop);
         int length = getChildCount();
         int expandChildIndex = indexOfChild(releasedChild);
-        for (int i = expandChildIndex + 1; i < length; i++) {
-            View child = getChildAt(i);
-            playShrinkItemAnimation(child);
+        for (int i = 0; i < length; i++) {
+            if (i != expandChildIndex) {
+                View child = getChildAt(i);
+                playShrinkItemAnimation(child);
+            }
         }
         invalidate();
     }
@@ -287,8 +292,10 @@ public class FolderLayout extends FrameLayout{
         int length = getChildCount();
         int expandChildIndex = indexOfChild(releasedChild);
         for (int i = expandChildIndex + 1; i < length; i++) {
-            View child = getChildAt(i);
-            playExpandItemAnimation(child);
+            if (i != expandChildIndex) {
+                View child = getChildAt(i);
+                playExpandItemAnimation(child);
+            }
         }
         invalidate();
     }
@@ -372,6 +379,7 @@ public class FolderLayout extends FrameLayout{
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             LayoutParams lp = (LayoutParams) changedView.getLayoutParams();
             mSlideOffset = 1f - (float) (lp.expandTop - top) / (lp.expandTop - lp.shrinkTop);
+            mClipBottom = changedView.getBottom();
             invalidate();
         }
 
@@ -395,12 +403,14 @@ public class FolderLayout extends FrameLayout{
             if (oldOpenValue != lp.isOpen) { //value has been changed
                 int length = getChildCount();
                 int expandChildIndex = indexOfChild(releasedChild);
-                for (int i = expandChildIndex + 1; i < length; i++) {
-                    final View child = getChildAt(i);
-                    if (lp.isOpen) {
-                        playShrinkItemAnimation(child);
-                    } else {
-                        playExpandItemAnimation(child);
+                for (int i = 0; i < length; i++) {
+                    if (i != expandChildIndex) {
+                        final View child = getChildAt(i);
+                        if (lp.isOpen) {
+                            playShrinkItemAnimation(child);
+                        } else {
+                            playExpandItemAnimation(child);
+                        }
                     }
                 }
             }
