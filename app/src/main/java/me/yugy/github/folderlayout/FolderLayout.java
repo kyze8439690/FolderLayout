@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewGroupCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -490,5 +493,81 @@ public class FolderLayout extends FrameLayout{
         return new LayoutParams(p);
     }
 
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        final SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        mHandlerHeight = ss.handlerHeight;
+        mMinHandlerHeight = ss.minHandlerHeight;
+        mClipBottom = ss.clipBottom;
+        mCoveredFadeColor = ss.coveredFadeColor;
+
+        if (ss.openItemIndex != -1) {
+            View child = getChildAt(ss.openItemIndex);
+            if (child != null) {
+                LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                lp.isOpen = true;
+            }
+        }
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+
+        final SavedState ss = new SavedState(superState);
+
+        ss.openItemIndex = findExpandedItemIndex();
+        ss.handlerHeight = mHandlerHeight;
+        ss.minHandlerHeight = mMinHandlerHeight;
+        ss.clipBottom = mClipBottom;
+        ss.coveredFadeColor = mCoveredFadeColor;
+
+        return ss;
+    }
+
+    protected static class SavedState extends BaseSavedState {
+        int openItemIndex = -1;
+        int handlerHeight;
+        int minHandlerHeight;
+        int clipBottom;
+        int coveredFadeColor;
+
+        public SavedState(Parcel in) {
+            super(in);
+            openItemIndex = in.readInt();
+            handlerHeight = in.readInt();
+            minHandlerHeight = in.readInt();
+            clipBottom = in.readInt();
+            coveredFadeColor = in.readInt();
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeInt(openItemIndex);
+            dest.writeInt(handlerHeight);
+            dest.writeInt(minHandlerHeight);
+            dest.writeInt(clipBottom);
+            dest.writeInt(coveredFadeColor);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }
 
 }
