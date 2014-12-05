@@ -80,6 +80,7 @@ public class FolderLayout extends FrameLayout{
 
             mHandlerHeight = a.getDimensionPixelSize(R.styleable.FolderLayout_handlerHeight, mHandlerHeight);
             mMinHandlerHeight = a.getDimensionPixelSize(R.styleable.FolderLayout_minHandlerHeight, mMinHandlerHeight);
+            mCoveredFadeColor = a.getColor(R.styleable.FolderLayout_coverColor, mCoveredFadeColor);
 
             a.recycle();
         }

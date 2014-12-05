@@ -5,6 +5,7 @@
 
         <attr name="handlerHeight" format="dimension" />
         <attr name="minHandlerHeight" format="dimension" />
+        <attr name="coverColor" format="color" />
 
     </declare-styleable>
 
