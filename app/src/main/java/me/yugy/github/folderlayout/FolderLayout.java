@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
@@ -87,6 +88,26 @@ public class FolderLayout extends FrameLayout{
 
         setWillNotDraw(false);
         ViewGroupCompat.setMotionEventSplittingEnabled(this, false);
+    }
+
+    public void setHandlerHeight(int handlerHeight) {
+        mHandlerHeight = handlerHeight;
+        requestLayout();
+    }
+
+    public void setMinHandlerHeight(int minHandlerHeight) {
+        mMinHandlerHeight = minHandlerHeight;
+        requestLayout();
+    }
+
+    public void setCoveredFadeColor(int coveredFadeColor) {
+        mCoveredFadeColor = coveredFadeColor;
+        invalidate();
+    }
+
+    public void setCoveredFadeColorResource(@ColorRes int colorResource) {
+        mCoveredFadeColor = getResources().getColor(colorResource);
+        invalidate();
     }
 
     @Override
@@ -211,7 +232,11 @@ public class FolderLayout extends FrameLayout{
                 if (lp.isOpen) {
                     child.layout(childLeft, lp.expandTop, childLeft + width, lp.expandTop + height);
                 } else {
-                    child.layout(childLeft, lp.shrinkTop, childLeft + width, lp.shrinkTop + height);
+                    if (hasItemExpanded()) {
+                        child.layout(childLeft, lp.minimumTop, childLeft + width, lp.minimumTop + height);
+                    } else {
+                        child.layout(childLeft, lp.shrinkTop, childLeft + width, lp.shrinkTop + height);
+                    }
                 }
             }
         }
