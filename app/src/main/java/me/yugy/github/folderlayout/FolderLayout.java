@@ -10,8 +10,6 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewGroupCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -90,7 +88,6 @@ public class FolderLayout extends FrameLayout{
         }
 
         setWillNotDraw(false);
-        ViewGroupCompat.setMotionEventSplittingEnabled(this, false);
     }
 
     public void setHandlerHeight(int handlerHeight) {
@@ -136,7 +133,7 @@ public class FolderLayout extends FrameLayout{
                 final float ady = Math.abs(y - mInitialMotionY);
                 final int slop = mDragHelper.getTouchSlop();
 
-                View horizontalScrollableView = findHorizontalScrollableViewAtPosition(this, (int) x, (int) y);
+                View horizontalScrollableView = findHorizontalScrollableViewAtPosition(mDragHelper.findTopChildUnder((int) x, (int) y), (int) x, (int) y);
 
                 if (adx < ady && ady > slop && horizontalScrollableView != null) {
                     if (canChildScrollUp(horizontalScrollableView)) {
@@ -167,6 +164,9 @@ public class FolderLayout extends FrameLayout{
     }
 
     private View findHorizontalScrollableViewAtPosition(View parent, int x, int y) {
+        if (parent == null) {
+            return null;
+        }
         if (parent instanceof AbsListView || parent instanceof ScrollView) {
             Rect rect = new Rect();
             parent.getGlobalVisibleRect(rect);
@@ -188,6 +188,7 @@ public class FolderLayout extends FrameLayout{
     }
 
     public boolean canChildScrollUp(View mTarget) {
+        Log.d("FolderLayout", mTarget.toString());
         if (android.os.Build.VERSION.SDK_INT < 14) {
             if (mTarget instanceof AbsListView) {
                 final AbsListView absListView = (AbsListView) mTarget;
@@ -198,7 +199,7 @@ public class FolderLayout extends FrameLayout{
                 return mTarget.getScrollY() > 0;
             }
         } else {
-            return ViewCompat.canScrollVertically(mTarget, -1);
+            return mTarget.canScrollVertically(-1);
         }
     }
 

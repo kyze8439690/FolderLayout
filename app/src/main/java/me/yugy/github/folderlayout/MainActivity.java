@@ -1,6 +1,5 @@
 package me.yugy.github.folderlayout;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -78,17 +76,18 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        mListView = (ListView) findViewById(R.id.list);
-        mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 new String[]{
                         "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item",
                         "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item",
                         "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item",
                         "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item", "list item",
-                }));
+                });
+        mListView = (ListView) findViewById(R.id.list);
+        mListView.setAdapter(adapter);
 
         mGridView = (GridView) findViewById(R.id.grid);
-        mGridView.setAdapter(mListView.getAdapter());
+        mGridView.setAdapter(adapter);
     }
 
 }
