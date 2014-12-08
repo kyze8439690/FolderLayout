@@ -296,9 +296,8 @@ public class FolderLayout extends FrameLayout{
         lp.isOpen = true;
         mDragHelper.smoothSlideViewTo(releasedChild, releasedChild.getLeft(), lp.expandTop);
         int length = getChildCount();
-        int expandChildIndex = indexOfChild(releasedChild);
         for (int i = 0; i < length; i++) {
-            if (i != expandChildIndex) {
+            if (i != index) {
                 View child = getChildAt(i);
                 playShrinkItemAnimation(child);
             }
@@ -320,9 +319,8 @@ public class FolderLayout extends FrameLayout{
         mDragHelper.smoothSlideViewTo(releasedChild, releasedChild.getLeft(), lp.shrinkTop);
 
         int length = getChildCount();
-        int expandChildIndex = indexOfChild(releasedChild);
-        for (int i = expandChildIndex + 1; i < length; i++) {
-            if (i != expandChildIndex) {
+        for (int i = 0; i < length; i++) {
+            if (i != index) {
                 View child = getChildAt(i);
                 playExpandItemAnimation(child);
             }
